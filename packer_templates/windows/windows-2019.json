@@ -149,7 +149,7 @@
     [
       {
         "keep_input_artifact": true,
-        "output": "{{ user `template` }}-{{.Provider}}.box",
+        "output": "{{ user `build_directory` }}/{{user `box_basename`}}.{{.Provider}}.box",
         "type": "vagrant",
         "vagrantfile_template": "{{template_dir}}/vagrantfile-windows.template"
       }
@@ -210,6 +210,7 @@
     }
   ],
   "variables": {
+    "box_basename": "windows-2019",
     "build_directory": "../../builds",
     "cpus": "2",
     "floppy_dir": "{{template_dir}}/answer_files",
