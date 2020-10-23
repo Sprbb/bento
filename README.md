@@ -40,32 +40,39 @@ end
 To build an Ubuntu 18.04 box for only the VirtualBox provider
 
 ```
-$ cd ubuntu
+$ cd packer_templates/ubuntu
 $ packer build -only=virtualbox-iso ubuntu-18.04-amd64.json
 ```
 
-To build Debian 10.4 32bit boxes for all possible providers (simultaneously)
+To build Debian 10.6 32bit boxes for all possible providers (simultaneously)
 
 ```
-$ cd debian
-$ packer build debian-10.4-i386.json
+$ cd packer_templates/debian
+$ packer build debian-10.6-i386.json
 ```
 
 To build CentOS 7.7 boxes for all providers except VMware and Parallels
 
 ```
-$ cd centos
+$ cd packer_templates/centos
 $ packer build -except=parallels-iso,vmware-iso centos-7.7-x86_64.json
 ```
 
 To use an alternate mirror
 
 ```
-$ cd fedora
+$ cd packer_templates/fedora
 $ packer build -var 'mirror=http://mirror.utexas.edu/fedora/linux' fedora-31-x86_64.json
 ```
 
-If the build is successful, ready to import box files will be in the `builds` directory at the root of the repository.
+To build a Windows 10 Enterprise Gen 2 box for the Hyper-V provider
+
+```
+$ cd packer_templates/windows
+$ packer build windows-10gen2.json
+```
+
+If the build is successful, your box files will be in the `builds` directory at the root of the repository.
 
 \***NOTE:** box_basename can be overridden like other Packer vars with `-var 'box_basename=ubuntu-18.04'`
 
@@ -89,11 +96,18 @@ Most of the providers expect unrestricted access to networking in order to build
 
 #### Windows
 
-```
+```powershell
 $VS = "Standardswitch"
 $IF_ALIAS = (Get-NetAdapter -Name "vEthernet ($VS)").ifAlias
 New-NetFirewallRule -Displayname "Allow incomming from $VS" -Direction Inbound -InterfaceAlias $IF_ALIAS -Action Allow
 ```
+
+#### Hyper-V Generation 2 VM's
+
+Hyper-V Gen 2 VMs do not support floppy drives. If you previously provided resources using a floppy drive, you must add those files to your Gen 2 iso images, in particular:
+
+- `autounattend.xml`: The Gen 2 `autounattend.xml` file supports EFI partitions. Update the `autounattend.xml` with the correct Windows version for your systems and ensure that the partitions are correct for your situation. You also need to manage the driver disk that holds the hyper-v guest services drivers and adjust the `autounattend.xml` file as appropriate.
+- `base_setup.ps1`
 
 #### macOS / OSX
 

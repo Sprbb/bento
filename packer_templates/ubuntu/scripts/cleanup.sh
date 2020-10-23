@@ -45,7 +45,7 @@ apt-get -y purge popularity-contest installation-report command-not-found friend
 # 19.10+ don't have this package so fail gracefully
 apt-get -y purge command-not-found-data || true;
 
-# Exlude the files we don't need w/o uninstalling linux-firmware
+# Exclude the files we don't need w/o uninstalling linux-firmware
 echo "==> Setup dpkg excludes for linux-firmware"
 cat <<_EOF_ | cat >> /etc/dpkg/dpkg.cfg.d/excludes
 #BENTO-BEGIN
@@ -77,5 +77,5 @@ truncate -s 0 /etc/machine-id
 rm -rf /tmp/* /var/tmp/*
 
 # clear the history so our install isn't there
-export HISTSIZE=0
 rm -f /root/.wget-hsts
+export HISTSIZE=0
